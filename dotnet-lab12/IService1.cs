@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
+using System.ServiceModel.Web;
 
 namespace dotnet_lab12
 {
@@ -11,35 +11,50 @@ namespace dotnet_lab12
     [ServiceContract]
     public interface IService1
     {
-        [OperationContract]
-        string GetData(int value);
 
+        [WebGet(UriTemplate = "klub/{id}", ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
+        Klub DajKlub(string id);
 
-        // TODO: Add your service operations here
+        [WebGet(UriTemplate = "sviKlubovi", ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        List<Klub> DajSveKlubove();
+
     }
 
     // Use a data contract as illustrated in the sample below to add composite types to service operations.
     // You can add XSD files into the project. After building the project, you can directly use the data types defined there, with the namespace "dotnet_lab12.ContractType".
     [DataContract]
-    public class CompositeType
+    public class Klub
     {
-        bool boolValue = true;
-        string stringValue = "Hello ";
-
-        [DataMember]
-        public bool BoolValue
+        public Klub(int id, string naziv, string sport, string drzava, int godinaosnivanja)
         {
-            get { return boolValue; }
-            set { boolValue = value; }
+            Id = id;
+            Naziv = naziv;
+            Sport = sport;
+            Drzava = drzava;
+            GodinaOsnivanja = godinaosnivanja;
         }
 
+
         [DataMember]
-        public string StringValue
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
-        }
+        public int Id;
+
+
+        [DataMember]
+        public string Naziv;
+
+
+        [DataMember]
+        public string Sport;
+
+
+        [DataMember]
+        public string Drzava;
+
+
+        [DataMember]
+        public int GodinaOsnivanja;
+
     }
 }
